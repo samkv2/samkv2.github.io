@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Access | Shivam Kumar</title>
+    <link rel="stylesheet" href="index.css"> <!-- For theme variables -->
+    <link rel="stylesheet" href="auth.css">  <!-- For form styling -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Basic styles for auth.html body if needed, or rely on index.css */
+        body.auth-body-wrapper {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--auth-bg-color); /* Fallback, but theme script should override */
+            transition: background-color 0.3s ease;
+            position: relative;
+            overflow: hidden; /* For parallax */
+        }
+        .auth-container {
+            position: relative;
+            z-index: 1;
+        }
+        .hidden {
+            display: none !important;
+        }
+    </style>
+    <script>
+        // Apply theme from localStorage as early as possible
+        try {
+            const savedTheme = localStorage.getItem('portfolio-theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme); // Apply to <html> for :root vars
+             // Also apply to body for specific body styles if index.css targets body[data-theme]
+            document.addEventListener('DOMContentLoaded', () => {
+                document.body.setAttribute('data-theme', savedTheme);
+            });
+        } catch (e) {
+            console.error("Could not apply theme from localStorage", e);
+        }
+    </script>
+</head>
+<body class="auth-body-wrapper">
+
+    <div class="auth-parallax-bg">
+        <div class="auth-parallax-layer layer-1"></div>
+        <div class="auth-parallax-layer layer-2"></div>
+        <div class="auth-parallax-layer layer-3"></div>
+    </div>
+
+    <div class="auth-container">
+        <!-- Login Form -->
+        <div id="login-view" class="login-form-wrapper">
+            <div class="login-header">
+                <h2>Welcome Back!</h2>
+                <p>Sign in to continue your journey.</p>
+            </div>
+            <form id="loginForm" class="login-form" aria-labelledby="login-heading">
+                <h1 id="login-heading" class="sr-only">Login Form</h1>
+                <div class="input-group">
+                    <label for="email" class="sr-only">Email</label>
+                    <span class="input-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></span>
+                    <input type="email" id="email" placeholder="Email Address" required autocomplete="email">
+                </div>
+                <div class="input-group">
+                    <label for="password" class="sr-only">Password</label>
+                    <span class="input-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>
+                    <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
+                    <button type="button" class="password-toggle" aria-label="Show password">
+                        <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        <svg class="eye-closed hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                    </button>
+                </div>
+                <div class="options">
+                    <label class="remember-me"><input type="checkbox">Remember Me</label>
+                    <a href="#" class="forgot-password">Forgot Password?</a>
+                </div>
+                <button type="submit" class="login-button primary">Sign In</button>
+            </form>
+            <div class="social-login">
+                <p class="social-login-text">Or connect with</p>
+                <div class="social-icons">
+                    <button aria-label="Login with Google" class="social-button google"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/><path d="M1 1h22v22H1z" fill="none"/></svg></button>
+                    <button aria-label="Login with Facebook" class="social-button facebook"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3l-.5 3h-2.5v6.95A10.003 10.003 0 0022 12z" fill="#1877F2"/></svg></button>
+                    <button aria-label="Login with Apple" class="social-button apple"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path d="M17.42.36a4.06 4.06 0 00-2.83.94c-.9.84-.15 2.92.06 3.27.42.74 1.33 1.25 2.22 1.25.1 0 .2-.01.29-.01.8-.13 1.76-.74 2.18-1.5.2-.35.15-1.2-.08-1.6C18.9.99 17.75.25 17.42.36zm-2.6 4.38c-.02 0-.04 0-.06.01-.89.15-1.79.7-2.3 1.55-.93 1.55-.74 3.9.44 5.36 1.06 1.33 2.53 2.05 3.92 2.02 1.05-.02 2.12-.55 2.88-1.36s1.08-1.9.94-3.03c-.02-.18-.05-.36-.1-.52-1.38-2.3-3.6-2.9-4.72-4.03zM12.87 24A10.5 10.5 0 016.1 17.9c.07-.01.14-.01.21-.01 1.25 0 2.5-.4 3.58-1.16 1.14-.82 1.9-2 2.08-3.34H10.5c-1.07 0-1.5-.53-1.51-1.32 0-.9.6-1.35 1.63-1.35h1.9V8.22c0-1.2-.43-2.3-1.2-3.07C10.5 4.1 9.2 3.65 7.93 3.65c-.56 0-1.1.07-1.62.2C5.36 4.29 4.3 5.54 4.3 6.9c0 .12.01.24.02.35h0c.1.95.82 1.53 1.75 1.56.02 0 .05 0 .07.01h.02c.98 0 1.64-.6 1.62-1.52-.01-.7-.48-1.18-1.05-1.18-.05 0-.1 0-.14.01C7.2 5.02 8 4.7 8.87 4.7c.72 0 1.3.2 1.7.57.57.52.82 1.2.82 2.08v2.54h3.5c.98 0 1.4.48 1.42 1.2.01.8-.52 1.28-1.47 1.28h-3.38c-.28 1.83-1.3 3.3-2.73 4.25-1.25.83-2.73 1.28-4.23 1.28-.58 0-1.16-.07-1.72-.2C4.1 20.15 3 18.78 3 17.13c0-1.98 1.33-3.62 3.22-4.02.3-.06.6-.05.82.07.7.4.55 1.42-.24 1.73-.6.22-1.28.07-1.68-.4C4.6 14.1 4.4 13.55 4.4 13c0-.12.01.24.02-.35a3.63 3.63 0 013.5-3.48c1.9-.01 3.53 1.2 3.8 3.1.04.28.04.56.02.85-.3 2.6-2.17 4.76-4.66 5.75A10.53 10.53 0 0112.87 24z" fill="currentColor"/></svg></button>
+                </div>
+            </div>
+            <p class="form-switch-link">Don't have an account? <a href="#" id="switchToSignUp">Sign Up</a></p>
+        </div>
+
+        <!-- Signup Form -->
+        <div id="signup-view" class="login-form-wrapper signup-form-wrapper hidden">
+            <div class="login-header">
+                <h2>Create Your Account</h2>
+                <p>Join us and unlock a world of possibilities!</p>
+            </div>
+            <form id="signUpForm" class="login-form" aria-labelledby="signup-heading">
+                <h1 id="signup-heading" class="sr-only">Sign Up Form</h1>
+                <div class="input-group">
+                    <label for="fullName" class="sr-only">Full Name</label>
+                    <span class="input-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span>
+                    <input type="text" id="fullName" placeholder="Full Name" required autocomplete="name">
+                </div>
+                <div class="input-group">
+                    <label for="signUpEmail" class="sr-only">Email</label>
+                     <span class="input-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></span>
+                    <input type="email" id="signUpEmail" placeholder="Email Address" required autocomplete="email">
+                </div>
+                <div class="input-group">
+                    <label for="signUpPassword" class="sr-only">Password</label>
+                    <span class="input-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>
+                    <input type="password" id="signUpPassword" placeholder="Create Password" required autocomplete="new-password">
+                     <button type="button" class="password-toggle" aria-label="Show password">
+                        <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        <svg class="eye-closed hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                    </button>
+                </div>
+                <div class="input-group">
+                    <label for="confirmPassword" class="sr-only">Confirm Password</label>
+                    <span class="input-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>
+                    <input type="password" id="confirmPassword" placeholder="Confirm Password" required autocomplete="new-password">
+                     <button type="button" class="password-toggle" aria-label="Show password">
+                        <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        <svg class="eye-closed hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                    </button>
+                </div>
+                <button type="submit" class="login-button primary">Sign Up</button>
+            </form>
+            <p class="form-switch-link">Already have an account? <a href="#" id="switchToLogin">Sign In</a></p>
+        </div>
+         <a href="index.html" class="close-auth-button" aria-label="Back to portfolio">&larr; Portfolio</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginView = document.getElementById('login-view');
+            const signupView = document.getElementById('signup-view');
+            const switchToSignUpLink = document.getElementById('switchToSignUp');
+            const switchToLoginLink = document.getElementById('switchToLogin');
+
+            // Form switching
+            if (switchToSignUpLink) {
+                switchToSignUpLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    loginView.classList.add('hidden');
+                    signupView.classList.remove('hidden');
+                });
+            }
+            if (switchToLoginLink) {
+                switchToLoginLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    signupView.classList.add('hidden');
+                    loginView.classList.remove('hidden');
+                });
+            }
+
+            // Password visibility toggle
+            document.querySelectorAll('.password-toggle').forEach(button => {
+                button.addEventListener('click', () => {
+                    const inputGroup = button.closest('.input-group');
+                    const passwordInput = inputGroup.querySelector('input[type="password"], input[type="text"]');
+                    const eyeOpen = button.querySelector('.eye-open');
+                    const eyeClosed = button.querySelector('.eye-closed');
+
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        eyeOpen.classList.add('hidden');
+                        eyeClosed.classList.remove('hidden');
+                        button.setAttribute('aria-label', 'Hide password');
+                    } else {
+                        passwordInput.type = 'password';
+                        eyeOpen.classList.remove('hidden');
+                        eyeClosed.classList.add('hidden');
+                        button.setAttribute('aria-label', 'Show password');
+                    }
+                });
+            });
+
+            // Handle form submissions (basic console log)
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    console.log('Login form submitted');
+                    // Add actual login logic here
+                });
+            }
+
+            const signUpForm = document.getElementById('signUpForm');
+            if (signUpForm) {
+                signUpForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const password = document.getElementById('signUpPassword').value;
+                    const confirmPassword = document.getElementById('confirmPassword').value;
+                    if (password !== confirmPassword) {
+                        alert("Passwords don't match!");
+                        return;
+                    }
+                    console.log('Sign up form submitted');
+                    // Add actual sign up logic here
+                });
+            }
+
+            // Parallax effect for auth page background
+            const parallaxBg = document.querySelector('.auth-parallax-bg');
+            if (parallaxBg) {
+                const layers = parallaxBg.querySelectorAll('.auth-parallax-layer');
+                document.body.addEventListener('mousemove', (event) => {
+                    const { clientX, clientY } = event;
+                    const { innerWidth, innerHeight } = window;
+                    const x = (clientX / innerWidth - 0.5) * 2; // -1 to 1
+                    const y = (clientY / innerHeight - 0.5) * 2; // -1 to 1
+
+                    layers.forEach((layer, index) => {
+                        const speed = (index + 1) * 7; // Adjust speed factor
+                        const invert = index % 2 === 0 ? 1 : -1;
+                        layer.style.transform = `translate(${x * speed * invert}px, ${y * speed}px)`;
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

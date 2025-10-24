@@ -1,0 +1,409 @@
+
+/* --- AUTH PAGE STYLING FOR STATIC AUTH.HTML --- */
+
+/* Scoped variables for auth.css, using global theme vars from index.css */
+.auth-body-wrapper { /* New top-level wrapper for auth.html body */
+    /* Theme variables (--auth-bg-color, etc.) are expected from index.css via :root or body[data-theme] */
+}
+
+/* Parallax Background specific to Auth Page */
+.auth-body-wrapper .auth-parallax-bg {
+    position: absolute; /* Changed from fixed for body wrapper */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; 
+    pointer-events: none;
+    overflow: hidden; 
+}
+
+.auth-body-wrapper .auth-parallax-layer {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.1;
+    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    will-change: transform;
+    background: var(--auth-accent-color); /* Uses variable from index.css */
+    filter: blur(50px);
+}
+
+.auth-body-wrapper .auth-parallax-layer.layer-1 {
+    width: clamp(200px, 30vw, 400px); height: clamp(200px, 30vw, 400px);
+    top: 10%; left: 15%;
+    opacity: 0.15;
+}
+.auth-body-wrapper .auth-parallax-layer.layer-2 {
+    width: clamp(150px, 25vw, 300px); height: clamp(150px, 25vw, 300px);
+    bottom: 15%; right: 20%;
+    opacity: 0.1;
+}
+.auth-body-wrapper .auth-parallax-layer.layer-3 {
+    width: clamp(100px, 20vw, 250px); height: clamp(100px, 20vw, 250px);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%); /* Center it initially */
+    opacity: 0.08;
+}
+
+/* AUTH FORM WRAPPER (LOGIN/SIGNUP) */
+.auth-container { /* This is the direct child of body in auth.html */
+    padding: 20px; /* Padding for smaller screens */
+}
+
+.login-form-wrapper { /* This class is on the form containers themselves */
+    background-color: var(--auth-bg-color);
+    padding: 35px 40px;
+    border-radius: var(--auth-border-radius, 12px);
+    box-shadow: 
+        -10px -10px 20px var(--auth-shadow-outset-light), 
+        10px 10px 20px var(--auth-shadow-outset-dark);
+    position: relative;
+    z-index: 1; /* Above parallax within auth-body-wrapper */
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    animation: formSlideUpAuthHTML 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+@keyframes formSlideUpAuthHTML { /* Renamed to avoid potential conflict if index.css has one */
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* Form Header */
+.login-form-wrapper .login-header {
+    margin-bottom: 30px;
+}
+.login-form-wrapper .login-header h2 {
+    color: var(--auth-primary-text-color);
+    font-size: 1.8em;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+}
+.login-form-wrapper .login-header p {
+    color: var(--auth-secondary-text-color);
+    font-size: 0.95em;
+    margin: 0;
+}
+
+/* Form Structure */
+.login-form-wrapper .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Input Fields */
+.login-form-wrapper .input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.login-form-wrapper .input-group .input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--auth-secondary-text-color);
+    pointer-events: none;
+    transition: color 0.2s ease;
+}
+.login-form-wrapper .input-group input {
+    width: 100%;
+    padding: 14px 15px 14px 45px; /* Space for icon */
+    background-color: var(--auth-input-bg);
+    color: var(--auth-primary-text-color);
+    border: 1px solid var(--auth-input-border-color);
+    border-radius: 8px;
+    font-size: 1em;
+    box-shadow: inset -3px -3px 6px var(--auth-shadow-inset-dark), 
+                inset 3px 3px 6px var(--auth-shadow-inset-light);
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.login-form-wrapper .input-group input::placeholder {
+    color: var(--auth-secondary-text-color);
+    opacity: 0.7;
+}
+.login-form-wrapper .input-group input:focus {
+    outline: none;
+    border-color: var(--auth-input-focus-border-color);
+    background-color: var(--auth-bg-color); 
+    box-shadow: inset -2px -2px 4px var(--auth-shadow-inset-dark), 
+                inset 2px 2px 4px var(--auth-shadow-inset-light),
+                0 0 0 2px var(--auth-input-focus-border-color);
+}
+.login-form-wrapper .input-group input:focus ~ .input-icon {
+    color: var(--auth-accent-color);
+}
+
+/* Password Toggle */
+.login-form-wrapper .password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    color: var(--auth-secondary-text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.login-form-wrapper .password-toggle:hover,
+.login-form-wrapper .password-toggle:focus {
+    color: var(--auth-accent-color);
+}
+.login-form-wrapper .password-toggle svg {
+    width: 20px;
+    height: 20px;
+}
+.login-form-wrapper .password-toggle .hidden {
+    display: none;
+}
+
+
+/* Options (Remember me, Forgot password) */
+.login-form-wrapper .options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0;
+}
+.login-form-wrapper .remember-me {
+    display: flex;
+    align-items: center;
+    font-size: 0.9em;
+    color: var(--auth-secondary-text-color);
+    cursor: pointer;
+}
+.login-form-wrapper .remember-me input[type="checkbox"] {
+    margin-right: 8px;
+    width: 16px;
+    height: 16px;
+    accent-color: var(--auth-accent-color);
+    background-color: var(--auth-input-bg);
+    border: 1px solid var(--auth-input-border-color);
+    border-radius: 4px;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+    box-shadow: inset -2px -2px 3px var(--auth-shadow-inset-dark), 
+                inset 2px 2px 3px var(--auth-shadow-inset-light);
+}
+.login-form-wrapper .remember-me input[type="checkbox"]:checked {
+    background-color: var(--auth-accent-color);
+    border-color: var(--auth-accent-color);
+    box-shadow: none;
+}
+.login-form-wrapper .remember-me input[type="checkbox"]:checked::before {
+    content: '✔';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+    color: var(--auth-button-text-color); 
+    /* For dark theme, if --auth-button-text-color becomes light, this will need adjustment */
+    /* If --auth-button-text-color is dark on light button for dark theme: */
+    body[data-theme="dark"] & {
+        color: var(--auth-bg-color); /* or a specific light color */
+    }
+}
+
+
+.login-form-wrapper .forgot-password {
+    font-size: 0.9em;
+    color: var(--auth-secondary-text-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+.login-form-wrapper .forgot-password:hover {
+    color: var(--auth-accent-color);
+    text-decoration: underline;
+}
+
+/* Main Login/Signup Button */
+.login-form-wrapper .login-button.primary {
+    width: 100%;
+    padding: 14px 20px;
+    background-color: var(--auth-accent-color);
+    color: var(--auth-button-text-color);
+    border: none;
+    border-radius: 8px;
+    font-size: 1.05em;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: -5px -5px 12px var(--auth-shadow-outset-light), 
+                 5px 5px 12px var(--auth-shadow-outset-dark);
+    transition: all 0.2s ease-in-out;
+    letter-spacing: 0.5px;
+}
+.login-form-wrapper .login-button.primary:hover {
+    background-color: var(--auth-accent-hover-color);
+    box-shadow: -3px -3px 8px var(--auth-shadow-outset-light), 
+                 3px 3px 8px var(--auth-shadow-outset-dark);
+    transform: translateY(-1px);
+}
+.login-form-wrapper .login-button.primary:active {
+    background-color: color-mix(in srgb, var(--auth-accent-hover-color) 90%, black);
+    box-shadow: inset -4px -4px 8px var(--auth-shadow-inset-dark), 
+                inset 4px 4px 8px var(--auth-shadow-inset-light);
+    transform: translateY(1px);
+}
+
+/* Social Login Section */
+.login-form-wrapper .social-login {
+    margin-top: 25px;
+}
+.login-form-wrapper .social-login-text {
+    font-size: 0.9em;
+    color: var(--auth-secondary-text-color);
+    margin-bottom: 15px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.login-form-wrapper .social-login-text::before,
+.login-form-wrapper .social-login-text::after {
+    content: '';
+    flex-grow: 1;
+    height: 1px;
+    background-color: var(--auth-input-border-color);
+    margin: 0 10px;
+}
+.login-form-wrapper .social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+.login-form-wrapper .social-button {
+    background-color: var(--auth-bg-color);
+    border: 1px solid transparent; 
+    border-radius: 50%; 
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--auth-primary-text-color); 
+    box-shadow: -4px -4px 8px var(--auth-shadow-outset-light), 
+                 4px 4px 8px var(--auth-shadow-outset-dark);
+    transition: all 0.2s ease-in-out;
+}
+.login-form-wrapper .social-button svg {
+    width: 20px;
+    height: 20px;
+}
+.login-form-wrapper .social-button:hover {
+    box-shadow: -2px -2px 5px var(--auth-shadow-outset-light), 
+                 2px 2px 5px var(--auth-shadow-outset-dark);
+    color: var(--auth-accent-color); 
+    transform: translateY(-1px);
+}
+.login-form-wrapper .social-button:active {
+    box-shadow: inset -2px -2px 5px var(--auth-shadow-inset-dark), 
+                inset 2px 2px 5px var(--auth-shadow-inset-light);
+    transform: translateY(1px);
+}
+.login-form-wrapper .social-button.google:hover { color: #4285F4; }
+.login-form-wrapper .social-button.facebook:hover { color: #1877F2; }
+/* Apple icon fill is currentColor, so its hover color will be --auth-accent-color */
+
+
+/* Form Switch Link (Sign Up / Sign In) */
+.login-form-wrapper .form-switch-link {
+    margin-top: 25px;
+    font-size: 0.95em;
+    color: var(--auth-secondary-text-color);
+}
+.login-form-wrapper .form-switch-link a {
+    color: var(--auth-accent-color);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+.login-form-wrapper .form-switch-link a:hover {
+    text-decoration: underline;
+    color: var(--auth-accent-hover-color);
+}
+
+/* Back to Portfolio Button for auth.html */
+.auth-container .close-auth-button { /* Specific to the container in auth.html */
+    position: fixed; /* Fixed position on the auth.html page */
+    top: 20px;
+    left: 20px; /* Changed to left for "Back" button feel */
+    background: var(--auth-bg-color);
+    color: var(--auth-primary-text-color);
+    border: none;
+    border-radius: 8px; /* Less round than original close */
+    padding: 10px 15px;
+    font-size: 0.9em; 
+    font-weight: 500; 
+    cursor: pointer;
+    z-index: 10; /* Above parallax layers */
+    text-decoration: none;
+    box-shadow: -4px -4px 8px var(--auth-shadow-outset-light), 
+                 4px 4px 8px var(--auth-shadow-outset-dark);
+    transition: all 0.2s ease;
+}
+.auth-container .close-auth-button:hover {
+    transform: translateX(-2px);
+    background-color: var(--auth-accent-color);
+    color: var(--auth-button-text-color);
+     box-shadow: -2px -2px 5px var(--auth-shadow-outset-light), 
+                 2px 2px 5px var(--auth-shadow-outset-dark);
+}
+
+/* SR Only class */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Responsive adjustments for Auth Forms in auth.html */
+@media (max-width: 480px) {
+    .login-form-wrapper {
+        padding: 30px 20px; /* Slightly less horizontal padding */
+        margin: 0; /* Wrapper itself is centered by body flex */
+        max-width: 100%; /* Take full width of auth-container padding */
+    }
+    .login-form-wrapper .login-header h2 { font-size: 1.6em; }
+    .login-form-wrapper .input-group input { padding-top: 12px; padding-bottom: 12px; }
+    .login-form-wrapper .login-button.primary { padding: 12px 18px; font-size: 1em;}
+    .login-form-wrapper .social-icons { gap: 12px; }
+    .login-form-wrapper .social-button { width: 40px; height: 40px; }
+    
+    .auth-body-wrapper .auth-parallax-layer.layer-1 {
+      width: clamp(150px, 40vw, 250px); height: clamp(150px, 40vw, 250px); 
+    }
+    .auth-body-wrapper .auth-parallax-layer.layer-2 { display: none; }
+    .auth-body-wrapper .auth-parallax-layer.layer-3 { display: none; }
+
+    .login-form-wrapper .options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .auth-container .close-auth-button {
+        padding: 8px 12px;
+        font-size: 0.85em;
+        top: 15px;
+        left: 15px;
+    }
+}
