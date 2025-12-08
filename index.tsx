@@ -6,6 +6,8 @@ import certJava from './assets/certs/cert_java.jpg';
 import certHackerX from './assets/certs/ethical_hacking_hackerX.jpg';
 import certUdemy from './assets/certs/ethical_hacking_udemy.jpg';
 import certReact from './assets/certs/reactjs_cert.jpg';
+import './index.css';
+import './auth.css';
 
 // --- Utility Functions ---
 function throttle<T extends (...args: any[]) => void>(func: T, limit: number): T {
