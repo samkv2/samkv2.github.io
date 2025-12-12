@@ -406,14 +406,14 @@ const CertificatesSection: React.FC<{ setRef: (el: HTMLElement | null) => void }
         },
         {
             title: "Java Programming",
-            issuer: "Udemy",
+            issuer: "Abdul Bari Academy",
             date: "Issued: Mar 2025",
             icon: <AwardIcon />,
             image: certJava
         },
         {
             title: "Data Structures & Algorithms",
-            issuer: "Udemy",
+            issuer: "Abdul Bari Academy",
             date: "Issued: Sep 2025",
             icon: <AwardIcon />,
             image: certDsa
@@ -427,7 +427,7 @@ const CertificatesSection: React.FC<{ setRef: (el: HTMLElement | null) => void }
         },
         {
             title: "Ethical Hacking Bootcamp",
-            issuer: "Udemy",
+            issuer: "z Security",
             date: "Issued: 2023",
             icon: <AwardIcon />,
             image: certUdemy
