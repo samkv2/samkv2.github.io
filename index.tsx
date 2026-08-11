@@ -1,11 +1,13 @@
 
 import React, { useState, useEffect, useRef, useCallback, Suspense, lazy, ComponentType, LazyExoticComponent } from 'react';
 import { createRoot } from 'react-dom/client';
+import anime from 'animejs';
 import certDsa from './assets/certs/cert_dsa.jpg';
 import certJava from './assets/certs/cert_java.jpg';
 import certHackerX from './assets/certs/ethical_hacking_hackerX.jpg';
 import certUdemy from './assets/certs/ethical_hacking_udemy.jpg';
 import certReact from './assets/certs/reactjs_cert.jpg';
+import resumePdf from './assets/certs/resumeCyberBasic.pdf';
 import './index.css';
 import './auth.css';
 
@@ -71,11 +73,13 @@ interface IntersectionObserverOptions extends IntersectionObserverInit {
 }
 
 const useIntersectionObserver = (
-    options: IntersectionObserverOptions = {}
+    options: IntersectionObserverOptions = {},
+    animeParams?: anime.AnimeParams
 ): [React.Dispatch<React.SetStateAction<Element | null>>, boolean] => {
     const [element, setElement] = useState<Element | null>(null);
     const [isIntersecting, setIsIntersecting] = useState(false);
     const observer = useRef<IntersectionObserver | null>(null);
+    const animated = useRef(false);
 
     useEffect(() => {
         if (observer.current) {
@@ -83,14 +87,29 @@ const useIntersectionObserver = (
         }
 
         if (element) {
+            anime.set(element, { opacity: 0, translateY: 40, scale: 0.95 });
+
             observer.current = new IntersectionObserver(([entry]) => {
                 if (entry.isIntersecting) {
                     setIsIntersecting(true);
+                    if (!animated.current || !options.triggerOnce) {
+                        anime({
+                            targets: element,
+                            opacity: 1,
+                            translateY: 0,
+                            scale: 1,
+                            duration: 1000,
+                            easing: 'easeOutElastic(1, .8)',
+                            ...animeParams
+                        });
+                        if (options.triggerOnce) animated.current = true;
+                    }
                     if (options.triggerOnce && observer.current) {
                         observer.current.unobserve(entry.target);
                     }
                 } else if (!options.triggerOnce) {
                     setIsIntersecting(false);
+                    anime.set(element, { opacity: 0, translateY: 40, scale: 0.95 });
                 }
             }, options);
 
@@ -102,8 +121,7 @@ const useIntersectionObserver = (
                 observer.current.disconnect();
             }
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [element, options.threshold, options.root, options.rootMargin, options.triggerOnce]);
+    }, [element, options.threshold, options.root, options.rootMargin, options.triggerOnce]); // intentionally omitting animeParams to prevent re-triggers
 
     return [setElement, isIntersecting];
 };
@@ -127,8 +145,8 @@ const SectionWrapper: React.FC<SectionWrapperProps> = React.memo(({ id, classNam
     }, [setRef, containerRef]);
 
     return (
-        <section ref={combinedRef} id={id} className={`portfolio-section ${className || ''} ${isSectionVisible ? 'scroll-fade-up is-visible' : 'scroll-fade-up'}`}>
-            {title && <h2 ref={titleRef} className={`section-title ${isTitleVisible ? 'is-visible' : ''}`}>{title}</h2>}
+        <section ref={combinedRef} id={id} className={`portfolio-section ${className || ''}`}>
+            {title && <h2 ref={titleRef} className={`section-title`}>{title}</h2>}
             {children}
         </section>
     );
@@ -162,10 +180,10 @@ const AboutSection: React.FC<{ setRef: (el: HTMLElement | null) => void }> = Rea
 });
 
 const SkillCard: React.FC<{ title: string; skills: string[]; icon?: React.ReactNode; delay?: string }> = React.memo(({ title, skills, icon, delay }) => {
-    const [ref, isVisible] = useIntersectionObserver({ threshold: 0.2, triggerOnce: false });
+    const [ref, isVisible] = useIntersectionObserver({ threshold: 0.2, triggerOnce: false }, { delay: delay ? parseFloat(delay) * 1000 : 0 });
     return (
-        <div ref={ref} className={`skill-card ${isVisible ? 'scroll-fade-up is-visible' : 'scroll-fade-up'}`} style={{ transitionDelay: delay }}>
-            {icon && <div className={`skill-card-icon-wrapper ${isVisible ? 'scroll-fade-up is-visible' : 'scroll-fade-up'}`}>{icon}</div>}
+        <div ref={ref} className={`skill-card`} >
+            {icon && <div className={`skill-card-icon-wrapper`}>{icon}</div>}
             <h3 className="skill-card-title">{title}</h3>
             <ul>
                 {skills.map(skill => <li key={skill}>{skill}</li>)}
@@ -230,9 +248,9 @@ const ProjectCardArtSVG: React.FC = React.memo(() => (
 
 const ProjectCard: React.FC<{ title: string; description: string; technologies: string[]; link?: string; delay?: string }> =
     React.memo(({ title, description, technologies, link, delay }) => {
-        const [ref, isVisible] = useIntersectionObserver({ threshold: 0.2, triggerOnce: false });
+        const [ref, isVisible] = useIntersectionObserver({ threshold: 0.2, triggerOnce: false }, { delay: delay ? parseFloat(delay) * 1000 : 0 });
         return (
-            <div ref={ref} className={`project-card ${isVisible ? 'scroll-fade-up is-visible' : 'scroll-fade-up'}`} style={{ transitionDelay: delay }}>
+            <div ref={ref} className={`project-card`} >
                 <div className="project-card-image-placeholder">
                     <ProjectCardArtSVG />
                 </div>
@@ -272,7 +290,7 @@ interface Certificate {
 }
 
 const CertificateCard: React.FC<Certificate> = React.memo(({ title, issuer, date, icon, image, delay, onImageClick }) => {
-    const [ref, isVisible] = useIntersectionObserver({ threshold: 0.2, triggerOnce: false });
+    const [ref, isVisible] = useIntersectionObserver({ threshold: 0.2, triggerOnce: false }, { delay: delay ? parseFloat(delay) * 1000 : 0 });
 
     const handleImageClick = useCallback((e: React.MouseEvent<HTMLImageElement>) => {
         if (image && onImageClick) {
@@ -282,7 +300,7 @@ const CertificateCard: React.FC<Certificate> = React.memo(({ title, issuer, date
     }, [image, onImageClick]);
 
     return (
-        <div ref={ref} className={`certificate-card ${isVisible ? 'scroll-fade-up is-visible' : 'scroll-fade-up'}`} style={{ transitionDelay: delay }}>
+        <div ref={ref} className={`certificate-card`} >
             {image && (
                 <img
                     src={image}
@@ -461,7 +479,7 @@ const ContactSection: React.FC<{ setRef: (el: HTMLElement | null) => void }> = R
             <div className="contact-actions-wrapper">
                 <a href="mailto:shivamkv92@gmail.com" className="cta-button primary-cta">Email Me</a>
                 <div className="social-links-contact">
-                    <a href="https://www.linkedin.com/in/shivam-kumar-165923260?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile"><svg fill="#5b647c" height="200px" width="200px" version="1.1" id="Icons" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve" stroke="#5b647c"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M23,0H9C4,0,0,4,0,9v14c0,5,4,9,9,9h14c5,0,9-4,9-9V9C32,4,28,0,23,0z M12,25c0,0.6-0.4,1-1,1H7c-0.6,0-1-0.4-1-1V13 c0-0.6,0.4-1,1-1h4c0.6,0,1,0.4,1,1V25z M9,11c-1.7,0-3-1.3-3-3s1.3-3,3-3s3,1.3,3,3S10.7,11,9,11z M26,25c0,0.6-0.4,1-1,1h-3 c-0.6,0-1-0.4-1-1v-3.5v-1v-2c0-0.8-0.7-1.5-1.5-1.5S18,17.7,18,18.5v2v1V25c0,0.6-0.4,1-1,1h-3c-0.6,0-1-0.4-1-1V13 c0-0.6,0.4-1,1-1h4c0.3,0,0.5,0.1,0.7,0.3c0.6-0.2,1.2-0.3,1.8-0.3c3,0,5.5,2.5,5.5,5.5V25z"></path> </g></svg></a>
+                    <a href="https://www.linkedin.com/in/samkv2/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile"><svg fill="#5b647c" height="200px" width="200px" version="1.1" id="Icons" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve" stroke="#5b647c"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M23,0H9C4,0,0,4,0,9v14c0,5,4,9,9,9h14c5,0,9-4,9-9V9C32,4,28,0,23,0z M12,25c0,0.6-0.4,1-1,1H7c-0.6,0-1-0.4-1-1V13 c0-0.6,0.4-1,1-1h4c0.6,0,1,0.4,1,1V25z M9,11c-1.7,0-3-1.3-3-3s1.3-3,3-3s3,1.3,3,3S10.7,11,9,11z M26,25c0,0.6-0.4,1-1,1h-3 c-0.6,0-1-0.4-1-1v-3.5v-1v-2c0-0.8-0.7-1.5-1.5-1.5S18,17.7,18,18.5v2v1V25c0,0.6-0.4,1-1,1h-3c-0.6,0-1-0.4-1-1V13 c0-0.6,0.4-1,1-1h4c0.3,0,0.5,0.1,0.7,0.3c0.6-0.2,1.2-0.3,1.8-0.3c3,0,5.5,2.5,5.5,5.5V25z"></path> </g></svg></a>
                     <a href="https://github.com/samkv2" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile (Update Link)"><svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.5.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.36 1.08 2.94.83.09-.65.35-1.08.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.1.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.6 1.03 2.69 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.73c0 .27.18.58.69.48C19.13 20.17 22 16.42 22 12c0-5.52-4.48-10-10-10z" /></svg></a>
                 </div>
             </div>
@@ -712,7 +730,7 @@ const HeroSection: React.FC<{ onScrollToSection: (sectionId: string) => void, se
 
         return (
             <section ref={setRef} id="hero" className="portfolio-section hero-section">
-                <div ref={heroContentRef} className={`hero-content ${isHeroContentVisible ? 'scroll-fade-up is-visible' : 'scroll-fade-up'}`}>
+                <div ref={heroContentRef} className={`hero-content`}>
                     <h1 className="hero-title">
                         Hello, I'm{' '}
                         <span className="highlight-name typed-text-container">
@@ -731,7 +749,7 @@ const HeroSection: React.FC<{ onScrollToSection: (sectionId: string) => void, se
                     </p>
                     <div className="hero-cta-buttons">
                         <button onClick={() => onScrollToSection('projects')} className="cta-button primary-cta">View My Work</button>
-                        <a href="resumeShivam.pdf" target="_blank" rel="noopener noreferrer" className="cta-button secondary-cta">Download Resume</a>
+                        <a href={resumePdf} target="_blank" rel="noopener noreferrer" className="cta-button secondary-cta">Download Resume</a>
                         <button onClick={() => onScrollToSection('contact')} className="cta-button secondary-cta">Get In Touch</button>
                     </div>
                 </div>
